@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Êı¾İ¿â¹¤¾ßÀà °üÀ¨Êı¾İ¿âµÄÁ¬½Ó ¹Ø±ÕÁ¬½Ó
+ * æ•°æ®åº“å·¥å…·ç±» åŒ…æ‹¬æ•°æ®åº“çš„è¿æ¥ å…³é—­è¿æ¥
  * 
- * @author Administrator
+ * @author legend
  *
  */
 public class DBHelper {
@@ -20,21 +20,21 @@ public class DBHelper {
 	private static String name;
 	private static String pwd;
 
-	// ³õÊ¼»¯ÊôĞÔÎÄ¼şµÄ¼ÓÔØ
+	// åˆå§‹åŒ–å±æ€§æ–‡ä»¶çš„åŠ è½½
 	static {
 		try {
-			// ´´½¨Properties¶ÔÏó
+			// åˆ›å»ºPropertieså¯¹è±¡
 			Properties properties = new Properties();
 
-			// ÄÚ¼ÓÔØÆ÷¼ÓÔØÎÄ¼ş
+			// å†…åŠ è½½å™¨åŠ è½½æ–‡ä»¶
 			InputStream inStream = DBHelper.class.getClassLoader().getResourceAsStream("config/oracle.properties");
 
-			// °ÑÁ÷¶ÔÏó´«µİ¸øProperties¶ÔÏó
+			// æŠŠæµå¯¹è±¡ä¼ é€’ç»™Propertieså¯¹è±¡
 			properties.load(inStream);
 
-			// µ÷ÓÃÊôĞÔÎÄ¼şÖĞµÄÖµ
-			driver = properties.getProperty("driver");// ¼ÓÔØÇı¶¯
-			url = properties.getProperty("url");// »ñµÃµØÖ·
+			// è°ƒç”¨å±æ€§æ–‡ä»¶ä¸­çš„å€¼
+			driver = properties.getProperty("driver");// åŠ è½½é©±åŠ¨
+			url = properties.getProperty("url");// è·å¾—åœ°å€
 			name = properties.getProperty("name");
 			pwd = properties.getProperty("pwd");
 
@@ -43,7 +43,7 @@ public class DBHelper {
 		}
 	}
 
-	// 1.Êı¾İ¿âÁ¬½Ó
+	// 1.æ•°æ®åº“è¿æ¥
 	public static Connection getConn() {
 		Connection conn = null;
 		try {
@@ -55,7 +55,7 @@ public class DBHelper {
 		return conn;
 	}
 
-	// 2¡¢¹Ø±ÕÊı¾İ¿â
+	// 2ã€å…³é—­æ•°æ®åº“
 	public static void getClose(ResultSet rs, PreparedStatement pstmt, Connection conn) {
 		try {
 			if (rs != null)
@@ -71,7 +71,7 @@ public class DBHelper {
 	}
 	
 	
-	//3.ÊµÏÖÍ¨ÓÃµÄÔöÉ¾¸Ä²Ù×÷µÄ·½·¨   µÚÒ»¸öÊÇsqlÓï¾ä   µÚ¶ş¸öÊÇ¶ÔÏóÊı×é
+	//3.å®ç°é€šç”¨çš„å¢åˆ æ”¹æ“ä½œçš„æ–¹æ³•   ç¬¬ä¸€ä¸ªæ˜¯sqlè¯­å¥   ç¬¬äºŒä¸ªæ˜¯å¯¹è±¡æ•°ç»„
 	public static void common(String sql,Object...obj) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -85,9 +85,9 @@ public class DBHelper {
 			}
 			int num = pstmt.executeUpdate();
 			if(num>0) {
-				System.out.println("²Ù×÷³É¹¦");
+				System.out.println("æ“ä½œæˆåŠŸ");
 			}else {
-				System.out.println("²Ù×÷Ê§°Ü");
+				System.out.println("æ“ä½œå¤±è´¥");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
