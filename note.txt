@@ -1,0 +1,128 @@
+MyBeanUtils.java工具类的使用：
+	1.导入jar包
+	2.导入MyBeanUtils.java工具类
+	3.使用
+	
+说明：jsp页面表单中input对象的name值与bean中属性值要同名
+
+
+使用工具类优化注册程序：
+	1.UUIDUtils:生成主键及激活码
+	2.MyBeanUtils:拷贝数据
+	
+	
+用户激活的实现思路:
+	1.往邮箱里面发送一条信息  （信息中携带了链接，连接中传递带激活码的参数到servlet中去做一些处理）
+		1-1：导入jar包
+		1-2:导入了工具类sendmail.java
+		
+		注意：发送邮箱需要开通授权码，	然后在工具类中密码的位置填写与"授权码"
+		
+	2.在Servlet通过邮箱发送过来的激活码去查找对应的用户对象  (select * from users where code = ?)
+	3.修改找到的用户对象的属性：state状态属性，把状态修改为1
+
+
+
+用户的自动登录和记住用户名实现过程
+	处理方法：让session失效
+	1、退出浏览器
+	2.代码让session失效
+	
+	
+jstl使用步骤
+	1.导入jar包
+	2.引入jstl标签库
+	3.使用
+	
+	
+使用分页工具类完成页面显示效果
+	1.导入分页类   PageUtils.java(分类的数据、集合、对应的连接url)   pageFile.jsp		
+	2.dao层创建分页的方法(获取总记录数、分页)
+		//获取总记录数的方法
+		public int totalRecord(String cid);
+		//分页
+		List<Product> findProductByCidWithPage(String cid,int startIndex,int endIndex)throws Exception;
+	3.dao层实现类实现分页代码	
+	4.service层创建分页的方法	
+		PageUtils findProductByCidWithPage(String cid,int curPageNo)throws Exception;
+		
+	5.service实现类实现分页代码
+		获取总记录数
+		创建pageUtils对象    开始下标和结束下标的获取
+		给pageUtils对象属性赋值(List  url)
+		
+	6.servlet层	
+	
+购物车的实现：
+	1、抽取购物车数据
+		1-1、购物车项（图片、商品名称、价格、数量、小计）
+		1-2、购物车（Map、总金额）
+			添加购物对象
+			删除购物对象
+			清空购物对象
+			
+	2、分析执行流程
+		页面
+		product_info.jsp(添加购物车)-->CartServlet
+		链接地址：CartServlet?method=addToCart&pid=1&num=10
+		
+		servlet层:CartServlet
+		1、接收数据（pid、num）
+		2、通过pid查找指定商品对象
+		3、构建购物车项对象(商品对象、数量、小计)
+		4、把购物车项添加购物车中
+		5、从session中获取购物车
+			5-1：session中没有购物车
+					新建购物车
+			5-2：session中存在购物车
+					从session获取购物车
+		6、把购物项添加到购物车（addCart方法）
+		7、跳转到cart.jsp页面显示数据	
+	
+
+--订单模块部分	
+	--订单表orders       关联用户表
+	
+	--订单项orderitem    关联商品表  订单表
+	
+	--搭建订单模块
+		搭建三层模块
+			 实体  domain：  Order    OrderItem
+		             修改页面
+		             
+		    servlet层：OrderServlet
+		    	1.判断用户是否登录    保存"用户登录名" 取得   ----》保存用户对象   可以取得任意属性
+		    	2.获取购物车对象
+		    	3.创建订单及订单项
+		    		3-1  创建订单
+		    			OID       VARCHAR2(32)    uuid生成                       
+						ORDERTIME DATE         Y     new date                    
+						TOTAL     NUMBER(8,2)  Y        购物中获取                    
+						STATE     NUMBER(11)   Y    1                       
+						ADDRESS   VARCHAR2(30) Y    null                     
+						NAME      VARCHAR2(30) Y    null                  
+						TELEPHONE VARCHAR2(30) Y    null                     
+						UUID（Users）      VARCHAR2(32) Y   用户对象    getUUid
+		    		
+		    		
+		    		3-2：创建订单项
+		    			遍历购物车项同时创建订单项  再把购物车项中饭的数据填充到订单项上
+		    			ITEMID   VARCHAR2(32)     UUID                      
+						QUANTITY NUMBER(11)   Y    购物车获取                       
+						TOTAL    NUMBER(8,2)  Y     购物车获取                    
+						PID      VARCHAR2(32) Y     商品对象                    
+						OID      VARCHAR2(32) Y 	订单对象
+		   
+		    4.调用业务逻辑层的保存方法实现数据的保存操作
+			5.request对象保存订单（order）
+			6.清空购物车数据
+			7.跳转到页面/jsp/order_info.jsp
+			
+			    
+			    service层
+			    	接口：orderService
+			    	实现类：orderServiceImpl
+				dao层：
+					接口：orderDao
+					实现类：OrderDaoImpl
+			
